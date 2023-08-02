@@ -4,7 +4,12 @@ function(instance, properties, context) {
 
   instance.data.composeInMe = [];
 
-  let chosenPageSize = properties.page_size.replace(/\W/g, ''); // small regex to remove any undesirable characters sent by bubble engine
+  let chosenPageSize = () => {
+    if (properties.custom_page_size === true)  {
+        let pageDimensions = { width: properties.page_width, height: properties.page_height };
+        return pageDimensions;
+    } else { return properties.page_size.replace(/\W/g, '') }// small regex to remove any undesirable characters sent by bubble engine
+  }
   let chosenPageOrientation = properties.page_orientation.replace(/\W/g, ''); // small regex to remove any undesirable characters sent by bubble engine
   let customMarginsDefinitionLogic = () => {
     if (properties.custom_margins === true) {
@@ -16,7 +21,7 @@ function(instance, properties, context) {
     content: instance.data.composeInMe,
     background: [],
     styles: {},
-    pageSize: chosenPageSize,
+    pageSize: chosenPageSize(),
     pageOrientation: chosenPageOrientation.toLowerCase(),
     pageMargins: customMarginsDefinitionLogic(),
     images: {},
